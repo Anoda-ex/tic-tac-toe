@@ -106,14 +106,12 @@ body{
   position: absolute;
   top: 10px;
   z-index: 100;
-  /* transform: translateX(-50%); */
 }
 
 .win-line__main-diagonal{
   position: absolute;
   top: 124px;
   left:-20px;
-  /* left: 5px; */
   transform: rotate(46deg);
   width: 280px;
   height: 6px;
@@ -124,7 +122,6 @@ body{
   position: absolute;
   top: 124px;
   left:-20px;
-  /* left: 5px; */
   transform: rotate(-46deg);
   width: 280px;
   height: 6px;
@@ -149,18 +146,18 @@ body{
   left: 50%;
   transform: translateX(-50%);
   width: 500px;
-  height: 200px;
   z-index: 200;
   background-color: white;
   -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
   box-shadow: 0 5px 15px rgba(0,0,0,.5);
   transition: all 0.2s;
+  padding: 20px 10px;
+
 }
 .modal--active{
   top: 100px;
 }
 .start-modal{
-  margin-top: 50px;
   text-align: center;
 }
 .start-modal__wrapper+.start-modal__wrapper{
@@ -187,5 +184,25 @@ body{
 }
 .draw-modal__text{
   font-size: 30px;
-  margin-top: 40px;
+}
+
+
+@media (max-width: 500px) {
+  .App{
+    flex-direction: column;
+  }
+  .game-arena{
+    margin-right: 0;
+    margin-bottom: 40px;
+  }
+  .score{
+    text-align: center;
+  }
+  .modal{
+    width: 300px;
+  }
+  .start-modal__input{
+    margin-top: 10px;
+    margin-left: 0;
+  }
 }

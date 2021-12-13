@@ -2,9 +2,8 @@ import './App.css';
 import React,{useState,useEffect} from "react"
 import GameArena from './Components/GameArena';
 import Score from './Components/Score';
-import Modal from "./Components/Modal"
-import StartModalContent from './Components/StartModalContent';
-import DrawModal from './Components/DrawModal';
+import StartGameModal from './Components/StartGameModal';
+import DrawModal from './Components/EndGameModal';
 const initGameArena=[
   [0,0,0],
   [0,0,0],
@@ -54,9 +53,9 @@ function App() {
   const [playersCellTypes,setPlayersCellTypes] = useState([1,2])
   const [activePlayer,setActivePlayer] = useState(0)
   const [winLinePosition,setWinLinePosition] = useState(null)
-  const [stopGame,setStopGame]=useState(false)
   const [startModal,setStartModal]=useState(false)
-  const [gameDraw,setGameDraw]=useState(false)
+  //1-first player, 2 - second player, 3-draw
+  const [endGameResult,setEndGameResult]=useState(0)
   useEffect(() => {
     setStartModal(true)
   }, [])
@@ -64,7 +63,7 @@ function App() {
 
   let moveHandler=(row,column)=>{
     let updateGameArena=[[...gameArena[0]],[...gameArena[1]],[...gameArena[2]]]
-    while(!updateGameArena[row][column] && !stopGame){
+    while(!updateGameArena[row][column] && !endGameResult){
       updateGameArena[row][column]=playersCellTypes[activePlayer]
       let winData=checkGameStatus(updateGameArena,playersCellTypes[activePlayer])
       if(winData){
@@ -73,8 +72,7 @@ function App() {
         setWinLinePosition(winData)
         setPlayers(updatePlayerData)
         setGameArena(updateGameArena)
-        setActivePlayer(activePlayer?0:1)
-        setStopGame(true)
+        setEndGameResult(activePlayer+1)
       }else{
         let isCanContinueGame=false
         for(let i of updateGameArena){
@@ -85,44 +83,41 @@ function App() {
           }
         }
         if(!isCanContinueGame){
-          setGameDraw(true)
+          setEndGameResult(3)
         }
-        if(updateGameArena)
         setGameArena(updateGameArena)
-        setActivePlayer(activePlayer?0:1)
       }
-
+      setActivePlayer(activePlayer?0:1)
 
     }
 
   }
   let startGame=()=>{
     setGameArena(initGameArena)
-    setPlayersCellTypes([...playersCellTypes].reverse())
-    setActivePlayer(activePlayer?0:1)
-    setStopGame(false)
+    let newPlayersCellTypes=[...playersCellTypes].reverse()
+    setPlayersCellTypes(newPlayersCellTypes)
+    setActivePlayer(newPlayersCellTypes[0]==1?0:1)
+    setEndGameResult(0)
+    setWinLinePosition(null)
   }
 
   return (
     <div className="App">
       <GameArena gameArena={gameArena} moveHandler={moveHandler} winLinePosition={winLinePosition}></GameArena>
       <Score players={players} activePlayer={activePlayer}></Score>
-      <Modal show={startModal} close={()=>{setStartModal(false)}}>
-          <StartModalContent
-            name1={players[0].name}
-            name2={players[1].name}
-            setPlayerNames={(name1,name2)=>{setPlayers([{name:name1,score:0},{name:name2,score:0}])}}
-            startGame={startGame}
-            close={()=>{setStartModal(false)}}>
-            
-          </StartModalContent>
-      </Modal>
-      <Modal show={gameDraw} close={()=>{setGameDraw(false)}}>
-          <DrawModal
-            close={()=>{setGameDraw(false)}}
-            startGame={startGame}  >
-          </DrawModal>
-      </Modal>
+      <StartGameModal
+        name1={players[0].name}
+        name2={players[1].name}
+        setPlayerNames={(name1,name2)=>{setPlayers([{name:name1,score:0},{name:name2,score:0}])}}
+        startGame={startGame}
+        show={startModal}
+        close={()=>{setStartModal(false)}}>
+      </StartGameModal>
+      <DrawModal
+        endGameResult={endGameResult}
+        startGame={startGame}
+        players={players}>
+      </DrawModal>
     </div>
   );
 }

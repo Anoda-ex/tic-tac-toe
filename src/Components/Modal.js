@@ -7,7 +7,7 @@ export default function Modal(props) {
     }
     return (
         <React.Fragment>  
-            {props.show&&<div className="backdrop" onClick={props.close}></div>}
+            {!!props.show&&<div className="backdrop" onClick={props.close}></div>}
             <div className={modalClassList.join(" ")}>
                 {props.children}
             </div>

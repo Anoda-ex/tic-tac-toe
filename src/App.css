@@ -152,6 +152,7 @@ body{
   box-shadow: 0 5px 15px rgba(0,0,0,.5);
   transition: all 0.2s;
   padding: 20px 10px;
+  border-radius: 10px;
 
 }
 .modal--active{
@@ -179,10 +180,10 @@ body{
   cursor: pointer;
   background-color: rgb(130, 199, 255);
 }
-.draw-modal{
+.end-game-modal{
   text-align: center;
 }
-.draw-modal__text{
+.end-game-modal__text{
   font-size: 30px;
 }
 
